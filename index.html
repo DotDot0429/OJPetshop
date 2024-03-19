@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OJ Petshop</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #d1e7dd; /* Light green forest */
+        }
+        #container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f0fff0; /* Light green forest */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #135813; /* Dark green */
+            text-align: center;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 10px;
+            color: #135813; /* Dark green */
+        }
+        select, input[type="number"] {
+            padding: 8px;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #347235; /* Green */
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #135813; /* Dark green */
+        }
+        #cart {
+            margin-top: 20px;
+            border-top: 2px solid #347235; /* Green */
+            padding-top: 20px;
+        }
+        #cart-items {
+            margin: 0;
+            padding: 0;
+        }
+        #cart-items li {
+            margin-bottom: 5px;
+        }
+        p {
+            margin: 10px 0;
+            color: #135813; /* Dark green */
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Welcome to the OJ Petshop! Here are our Pet Products.</h1>
+        <ul id="product-list">
+            <li data-name="Whiskas" data-price="60">Whiskas - 60 pesos</li>
+            <li data-name="Pedigree" data-price="50">Pedigree - 50 pesos</li>
+            <li data-name="Collar" data-price="20">Collar - 20 pesos</li>
+            <li data-name="Dentastix" data-price="25">Dentastix - 25 pesos</li>
+        </ul>
+
+        <label for="item">Choose an Item:</label>
+        <select name="item" id="item">
+            <option value="60">Whiskas</option>
+            <option value="50">Pedigree</option>
+            <option value="20">Collar</option>
+            <option value="25">Dentastix</option>
+        </select>
+
+        <h2>Quantity</h2>
+        <input type="number" id="quan">
+        <button onclick="addToCart()">Add to Cart</button>
+        
+        <div id="cart">
+            <h2>Cart</h2>
+            <ul id="cart-items"></ul>
+            <p>Total: <span id="total">0</span> pesos</p>
+        </div>
+
+        <h2>Cash</h2>
+        <input type="number" id="Cash">
+        <button onclick="finalizeOrder()">PAY</button>
+    </div>
+</body>
+</html>
+
+
+    <script>
+        const cartItems = [];
+
+        function addToCart() {
+            const select = document.getElementById("item");
+            const quantity = document.getElementById("quan").value;
+            const selectedItem = select.options[select.selectedIndex].text;
+            const selectedPrice = parseInt(select.options[select.selectedIndex].value);
+            const totalPrice = quantity * selectedPrice;
+
+            cartItems.push({ name: selectedItem, price: totalPrice });
+            renderCart();
+        }
+
+        function renderCart() {
+            const cartList = document.getElementById("cart-items");
+            cartList.innerHTML = "";
+            let total = 0;
+
+            cartItems.forEach(item => {
+                const li = document.createElement("li");
+                li.textContent = `${item.name} - ${item.price} pesos`;
+                cartList.appendChild(li);
+                total += item.price;
+            });
+
+            document.getElementById("total").textContent = total;
+        }
+
+        function finalizeOrder() {
+            const cashInput = document.getElementById("Cash").value;
+            const total = parseInt(document.getElementById("total").textContent);
+
+            if (cashInput < total) {
+                alert("Insufficient cash!");
+            } else {
+                const change = cashInput - total;
+                alert(`Thank you for your purchase! Your change is ${change} pesos`);
+                resetCart();
+            }
+        }
+
+        function resetCart() {
+            cartItems.length = 0;
+            document.getElementById("cart-items").innerHTML = "";
+            document.getElementById("total").textContent = 0;
+            document.getElementById("Cash").value = "";
+        }
+    </script>
+</body>
+</html>
+
+
